@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./quiz-backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./quiz-backend:/app/code
+      - db-data:/app/data
+    environment:
+      - FLASK_ENV=production
+      - JWT_SECRET_KEY=munsow-assessment
+      - DATABASE_URL=sqlite:////app/data/app.db
+
+volumes:
+  db-data:

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./quiz-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./quiz-frontend:/app
+      - frontend-node-modules:/app/node_modules
+
+volumes:
+  frontend-node-modules:

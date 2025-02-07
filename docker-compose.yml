@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./quiz-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./quiz-frontend:/app
+      - frontend-node-modules:/app/node_modules
+    environment:
+      - VITE_BACKEND_API_URL=http://localhost:5001/api/
+    networks:
+      - frontend_net
+      - backend_net
+
+  backend:
+    build: ./quiz-backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./quiz-backend:/app/code
+      - db-data:/app/data
+    environment:
+      - FLASK_ENV=production
+      - JWT_SECRET_KEY=munsow-assessment
+      - DATABASE_URL=sqlite:////app/data/app.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - backend_net
+
+volumes:
+  frontend-node-modules:
+  db-data:
+
+networks:
+  frontend_net:
+  backend_net: 
